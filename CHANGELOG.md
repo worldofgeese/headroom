@@ -284,6 +284,28 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **code:** fix two `CodeAwareCompressor` AST-reassembly bugs: an exported JS/TS function or class (`export function foo() {`) produced a duplicated `export export` keyword and invalid syntax, because line-based node slicing (used to preserve indentation) pulled in the preceding `export` sibling's text on top of the `export_statement` handler's own prefix reconstruction. Separately, in every supported language, a doc comment immediately above a top-level function, class, or type was detached from its declaration during extraction and re-emitted in a cluster at the end of the compressed output instead of staying attached to what it documents.
 - * **proxy:** Buffered upstream responses containing a `server_tool_use` (or any other unrecognized Anthropic content block) no longer turn a fully-generated response into an HTTP 502. `StreamingMixin._response_to_sse` raised `ValueError` on unknown block types after the entire upstream generation had already been buffered, so a slow-but-successful response failed and the client retried the whole multi-minute request. Unknown blocks are now emitted verbatim in `content_block_start` (following the existing redacted_thinking` pattern), so `server_tool_use`, `server_tool_result`, `mcp_tool_use`, and future block types round-trip ([#1806](https://github.com/headroomlabs-ai/headroom/issues/1806)).
 
+## [0.44.1](https://github.com/headroomlabs-ai/headroom/compare/v0.44.0...v0.44.1) (2026-11-11)
+
+
+### Bug Fixes
+
+* **benchmarks:** drop the duplicate protect_recent=0 table from the proof harness ([#4754](https://github.com/headroomlabs-ai/headroom/issues/4754)) ([a385ea8](https://github.com/headroomlabs-ai/headroom/commit/a385ea8e60a14c1511d82b21d518421af35deab2))
+* **cache:** exclude cold starts from TTL hit evidence ([#4728](https://github.com/headroomlabs-ai/headroom/issues/4728)) ([93df7ae](https://github.com/headroomlabs-ai/headroom/commit/93df7ae4f725da790823084dca0a8ab6467bfcfe))
+* **cache:** scope learned TTL cache to its source file ([#4727](https://github.com/headroomlabs-ai/headroom/issues/4727)) ([acb58a0](https://github.com/headroomlabs-ai/headroom/commit/acb58a0c00c9972abb7044b6ff3aa1b4cfed8e64))
+* **ci:** verify installer provenance in build workflows ([#4677](https://github.com/headroomlabs-ai/headroom/issues/4677)) ([b235bc2](https://github.com/headroomlabs-ai/headroom/commit/b235bc2d27f0b15b2c5a364f853d52ab0b3ea003))
+* **examples:** validate the macos launchagent port as plain decimal ([#4733](https://github.com/headroomlabs-ai/headroom/issues/4733)) ([a91c48a](https://github.com/headroomlabs-ai/headroom/commit/a91c48a3a4f89bd3892b5db9d08c0697e1a356ca))
+* **openclaw:** let the circuit breaker open on proxy failures ([#4755](https://github.com/headroomlabs-ai/headroom/issues/4755)) ([1372f95](https://github.com/headroomlabs-ai/headroom/commit/1372f9552460c49dee0bd1fb58e9d79518f73d8c))
+* **openclaw:** return structured retrieval tool results ([#4707](https://github.com/headroomlabs-ai/headroom/issues/4707)) ([e6b5777](https://github.com/headroomlabs-ai/headroom/commit/e6b5777806c53206ddea08ccede317e3e92971c6))
+* **opencode:** do not break every request when the proxy URL is empty or invalid ([#4750](https://github.com/headroomlabs-ai/headroom/issues/4750)) ([318e8e0](https://github.com/headroomlabs-ai/headroom/commit/318e8e080848061dadb92d22c6accc6161c9063e))
+* **opencode:** override effect to patched 4.0.0-beta.103 ([#4762](https://github.com/headroomlabs-ai/headroom/issues/4762)) ([19d439f](https://github.com/headroomlabs-ai/headroom/commit/19d439f7b0528846f96505203232841513f097d1))
+* **opencode:** stop routing non-LLM hosts and paths to the proxy ([#4747](https://github.com/headroomlabs-ai/headroom/issues/4747)) ([#4758](https://github.com/headroomlabs-ai/headroom/issues/4758)) ([c48778c](https://github.com/headroomlabs-ai/headroom/commit/c48778c4ab6add83bc4d46bde9ba2c5bc11edbc3))
+* **proxy:** don't take Claude Code's "Tool loaded." note as the user query ([#4714](https://github.com/headroomlabs-ai/headroom/issues/4714)) ([dcd03b9](https://github.com/headroomlabs-ai/headroom/commit/dcd03b9b4c58340a5f4448fd4740045294e156f7))
+* **proxy:** keep reserved openai tool names resident during tool search deferral ([#4753](https://github.com/headroomlabs-ai/headroom/issues/4753)) ([62f2a2d](https://github.com/headroomlabs-ai/headroom/commit/62f2a2decd5848100582c4e3d7219861f97f104f))
+* **proxy:** turn off the image stage when --compressor leaves out image ([#4723](https://github.com/headroomlabs-ai/headroom/issues/4723)) ([8f04221](https://github.com/headroomlabs-ai/headroom/commit/8f04221b2d390e990b98061853c5d6aea9b15e6d))
+* **sdk:** accept string contents and functionCall without args in the Gemini adapter ([#4756](https://github.com/headroomlabs-ai/headroom/issues/4756)) ([200c838](https://github.com/headroomlabs-ai/headroom/commit/200c838c7393d20ae56a0c338f832ed27133c398))
+* **sdk:** reject sharedcontext maxentries below 1 ([#4743](https://github.com/headroomlabs-ai/headroom/issues/4743)) ([4b6529f](https://github.com/headroomlabs-ai/headroom/commit/4b6529fc147698ca7bce6dfa993be49d1529f79b))
+* **wrap:** match Serena's unset dashboard key instead of appending a duplicate ([#4315](https://github.com/headroomlabs-ai/headroom/issues/4315)) ([1da8930](https://github.com/headroomlabs-ai/headroom/commit/1da8930ab47a2fc5339ded97e5a41bfe6fc419eb))
+
 ## [0.44.0](https://github.com/headroomlabs-ai/headroom/compare/v0.43.1...v0.44.0) (2026-11-09)
 
 
